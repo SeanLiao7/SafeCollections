@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace SafeCollections
 {
@@ -21,9 +22,9 @@ namespace SafeCollections
 
         public bool IsReadOnly => false;
 
-        public SafeCollection(ICollection<T> collection, object locker = null)
+        public SafeCollection(ICollection<T> collection = null, object locker = null)
         {
-            _collection = collection;
+            _collection = collection ?? new Collection<T>();
             _locker = locker ?? new object();
         }
 

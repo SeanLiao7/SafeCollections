@@ -97,10 +97,10 @@ namespace SafeCollectionsTests
         public void SafeList中移除指定元素_集合包含該元素且移除元素成功_集合長度減少1且回傳True()
         {
             var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
-            var isSucceeded = safeList.Remove(4);
+            var isSuccessful = safeList.Remove(4);
             const int expectedCount = 4;
             safeList.Count.Should().Be(expectedCount);
-            isSucceeded.Should().Be(true);
+            isSuccessful.Should().Be(true);
         }
 
         [Fact]
@@ -108,10 +108,10 @@ namespace SafeCollectionsTests
         public void SafeList中移除指定元素_集合不包含該元素且移除元素失敗_集合長度不變且回傳False()
         {
             var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
-            var isSucceeded = safeList.Remove(6);
+            var isSuccessful = safeList.Remove(6);
             const int expectedCount = 5;
             safeList.Count.Should().Be(expectedCount);
-            isSucceeded.Should().Be(false);
+            isSuccessful.Should().Be(false);
         }
 
         [Fact]
