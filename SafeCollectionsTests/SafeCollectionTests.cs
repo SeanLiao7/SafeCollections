@@ -23,7 +23,7 @@ namespace SafeCollectionsTests
 
         [Fact]
         [Trait("SafeCollections", "SafeCollection")]
-        public void 清除含有3個元素SafeCollection_清除成功_集合長度應為0()
+        public void 清除含有3個元素的SafeCollection_清除成功_集合長度應為0()
         {
             var safeCollection = new SafeCollection<int> { 1, 2, 3 };
             safeCollection.Clear();
