@@ -315,7 +315,7 @@ namespace SafeCollectionsTests
             result.SequenceEqual(safeDictionary.Values).Should().Be(true);
         }
 
-        [Fact(Skip = "MutiThread scenario result in long running, this test case should be executed on demand.")]
+        [Fact(Skip = "MutiThread scenario result in long running, this test case should be executed only on demand.")]
         //[Fact]
         [Trait("SafeCollections", "SafeCollection")]
         public void 繞行SafeDictionary操作集合_不同執行緒同時對SafeDictionary新增與刪除元素_不應擲出例外()
