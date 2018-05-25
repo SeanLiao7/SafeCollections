@@ -12,7 +12,7 @@ namespace SafeCollections
         KeyValuePair<TKey, TValue> IEnumerator<KeyValuePair<TKey, TValue>>.Current => _enumerator.Current;
         object IEnumerator.Current => _enumerator.Current;
 
-        public SafeTableEnumerator(Dictionary<TKey, TValue> table, object locker)
+        public SafeTableEnumerator(IDictionary<TKey, TValue> table, object locker)
         {
             Monitor.Enter(locker);
             _enumerator = table.GetEnumerator();

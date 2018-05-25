@@ -6,8 +6,8 @@ namespace SafeCollections
 {
     public sealed class SafeList<T> : IList<T>
     {
-        private readonly List<T> _list = new List<T>();
-        private readonly object _locker = new object();
+        private readonly List<T> _list;
+        private readonly object _locker;
 
         public int Count
         {
@@ -19,6 +19,12 @@ namespace SafeCollections
         }
 
         public bool IsReadOnly => false;
+
+        public SafeList(List<T> list = null, object locker = null)
+        {
+            _list = list ?? new List<T>();
+            _locker = locker ?? new object();
+        }
 
         public T this[int index]
         {
@@ -58,9 +64,9 @@ namespace SafeCollections
                 _list.CopyTo(array, arrayIndex);
         }
 
-        IEnumerator<T> IEnumerable<T>.GetEnumerator() => new SafeEnumerator<T>(_list, _locker);
+        public IEnumerator<T> GetEnumerator() => new SafeEnumerator<T>(_list, _locker);
 
-        public IEnumerator GetEnumerator() => new SafeEnumerator<T>(_list, _locker);
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public int IndexOf(T item)
         {
@@ -80,18 +86,18 @@ namespace SafeCollections
                 return _list.Remove(item);
         }
 
-        public void RemoveAt(int index)
-        {
-            lock (_locker)
-                _list.RemoveAt(index);
-        }
-
         public int RemoveAll(Predicate<T> match)
         {
             lock (_locker)
             {
                 return _list.RemoveAll(match);
             }
+        }
+
+        public void RemoveAt(int index)
+        {
+            lock (_locker)
+                _list.RemoveAt(index);
         }
     }
 }

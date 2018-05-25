@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SafeCollections
 {
     public class SafeDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
-        private readonly object _locker = new object();
-        private readonly Dictionary<TKey, TValue> _table = new Dictionary<TKey, TValue>();
+        private readonly object _locker;
+        private readonly IDictionary<TKey, TValue> _table;
 
         public int Count
         {
@@ -25,6 +24,12 @@ namespace SafeCollections
         public ICollection<TKey> Keys => new SafeCollection<TKey>(_table.Keys, _locker);
 
         public ICollection<TValue> Values => new SafeCollection<TValue>(_table.Values, _locker);
+
+        public SafeDictionary(IDictionary<TKey, TValue> table = null, object locker = null)
+        {
+            _table = table ?? new Dictionary<TKey, TValue>();
+            _locker = locker ?? new object();
+        }
 
         public TValue this[TKey key]
         {
@@ -49,16 +54,16 @@ namespace SafeCollections
             lock (_locker)
             {
                 if (_table.ContainsKey(key) == false)
-                    (_table as IDictionary).Add(key, value);
+                    _table.Add(key, value);
             }
         }
 
-        public void Add(KeyValuePair<TKey, TValue> item)
+        void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
         {
             lock (_locker)
             {
                 if (_table.ContainsKey(item.Key) == false)
-                    (_table as ICollection<KeyValuePair<TKey, TValue>>).Add(item);
+                    _table.Add(item);
             }
         }
 
@@ -70,7 +75,7 @@ namespace SafeCollections
             }
         }
 
-        public bool Contains(KeyValuePair<TKey, TValue> item)
+        bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
         {
             lock (_locker)
             {
@@ -90,7 +95,7 @@ namespace SafeCollections
         {
             lock (_locker)
             {
-                (_table as ICollection<KeyValuePair<TKey, TValue>>).CopyTo(array, arrayIndex);
+                _table.CopyTo(array, arrayIndex);
             }
         }
 
@@ -107,11 +112,11 @@ namespace SafeCollections
             }
         }
 
-        public bool Remove(KeyValuePair<TKey, TValue> item)
+        bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
         {
             lock (_locker)
             {
-                return (_table as ICollection<KeyValuePair<TKey, TValue>>).Remove(item);
+                return _table.Remove(item);
             }
         }
 
@@ -122,6 +127,5 @@ namespace SafeCollections
                 return _table.TryGetValue(key, out value);
             }
         }
-       
     }
 }
