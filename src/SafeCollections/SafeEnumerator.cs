@@ -15,13 +15,12 @@ namespace SafeCollections
 
         public SafeEnumerator(IEnumerable<T> list, ReaderWriterLockSlim locker)
         {
-            //Monitor.Enter(locker);
             locker.EnterReadLock();
             _enumerator = list.GetEnumerator();
             _locker = locker;
         }
 
-        public void Dispose() => /*Monitor.Exit(_locker);*/ _locker.ExitReadLock();
+        public void Dispose() => _locker.ExitReadLock();
 
         public bool MoveNext() => _enumerator.MoveNext();
 
