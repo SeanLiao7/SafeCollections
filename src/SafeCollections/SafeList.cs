@@ -133,7 +133,6 @@ namespace SafeCollections
             finally
             {
                 _locker.ExitReadLock();
-
             }
         }
 

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ReaderWriterLockTiny.cs" />
     <Compile Include="SafeCollection.cs" />
     <Compile Include="SafeDictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
