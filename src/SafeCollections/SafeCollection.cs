@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace SafeCollections
 {
     public sealed class SafeCollection<T> : ICollection<T>
     {
         private readonly ICollection<T> _collection;
-        private readonly object _locker;
+        private readonly ReaderWriterLockSlim _locker;
 
         public int Count
         {
@@ -22,10 +23,10 @@ namespace SafeCollections
 
         public bool IsReadOnly => false;
 
-        public SafeCollection(ICollection<T> collection = null, object locker = null)
+        public SafeCollection(ICollection<T> collection = null, ReaderWriterLockSlim locker = null)
         {
             _collection = collection ?? new Collection<T>();
-            _locker = locker ?? new object();
+            _locker = locker ?? new ReaderWriterLockSlim();
         }
 
         public void Add(T item)

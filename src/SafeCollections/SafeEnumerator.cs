@@ -7,20 +7,21 @@ namespace SafeCollections
     public struct SafeEnumerator<T> : IEnumerator<T>
     {
         private readonly IEnumerator<T> _enumerator;
-        private readonly object _locker;
+        private readonly ReaderWriterLockSlim _locker;
 
         public T Current => _enumerator.Current;
 
         object IEnumerator.Current => Current;
 
-        public SafeEnumerator(IEnumerable<T> list, object locker)
+        public SafeEnumerator(IEnumerable<T> list, ReaderWriterLockSlim locker)
         {
-            Monitor.Enter(locker);
+            //Monitor.Enter(locker);
+            locker.EnterReadLock();
             _enumerator = list.GetEnumerator();
             _locker = locker;
         }
 
-        public void Dispose() => Monitor.Exit(_locker);
+        public void Dispose() => /*Monitor.Exit(_locker);*/ _locker.ExitReadLock();
 
         public bool MoveNext() => _enumerator.MoveNext();
 

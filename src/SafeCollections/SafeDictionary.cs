@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace SafeCollections
 {
     public class SafeDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
-        private readonly object _locker;
+        private readonly ReaderWriterLockSlim _locker;
         private readonly IDictionary<TKey, TValue> _table;
 
         public int Count
@@ -25,10 +26,10 @@ namespace SafeCollections
 
         public ICollection<TValue> Values => new SafeCollection<TValue>(_table.Values, _locker);
 
-        public SafeDictionary(IDictionary<TKey, TValue> table = null, object locker = null)
+        public SafeDictionary(IDictionary<TKey, TValue> table = null, ReaderWriterLockSlim locker = null)
         {
             _table = table ?? new Dictionary<TKey, TValue>();
-            _locker = locker ?? new object();
+            _locker = locker ?? new ReaderWriterLockSlim();
         }
 
         public TValue this[TKey key]

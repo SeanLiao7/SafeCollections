@@ -162,8 +162,8 @@ namespace SafeCollectionsTests
             result.SequenceEqual(safeList).Should().Be(true);
         }
 
-        [Fact(Skip = "MutiThread scenario result in long running, this test case should be executed only on demand.")]
-        //[Fact]
+        //[Fact(Skip = "MutiThread scenario result in long running, this test case should be executed only on demand.")]
+        [Fact]
         [Trait("SafeCollections", "SafeList")]
         public void 繞行SafeList操作集合_不同執行緒同時對SafeList新增與刪除元素_不應擲出例外()
         {

@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace SafeCollections
 {
     public sealed class SafeEnumerable<T> : IEnumerable<T>
     {
         private readonly IEnumerable<T> _enumerator;
-        private readonly object _locker;
+        private readonly ReaderWriterLockSlim _locker;
 
-        public SafeEnumerable(IEnumerable<T> enumerator, object locker)
+        public SafeEnumerable(IEnumerable<T> enumerator, ReaderWriterLockSlim locker)
         {
             _locker = locker;
             _enumerator = enumerator;
