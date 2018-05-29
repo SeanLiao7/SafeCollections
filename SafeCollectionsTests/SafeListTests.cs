@@ -162,6 +162,67 @@ namespace SafeCollectionsTests
             result.SequenceEqual(safeList).Should().Be(true);
         }
 
+        [Fact]
+        [Trait("SafeCollections", "SafeList")]
+        public void 搜尋集和符合條件的單一元素_搜尋成功_搜尋結果應符合期待()
+        {
+            var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
+            var result = safeList.Find(x => x > 2);
+            const int expectedResult = 3;
+            result.Should().Be(expectedResult);
+        }
+
+        [Fact]
+        [Trait("SafeCollections", "SafeList")]
+        public void 搜尋集合所有符合條件的元素_搜尋成功_搜尋結果應符合期待()
+        {
+            var safeList = new SafeList<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            var result = safeList.FindAll(x => x < 6);
+            var expectedResult = new List<int> { 1, 2, 3, 4, 5 };
+            result.SequenceEqual(expectedResult).Should().Be(true);
+        }
+
+        [Fact]
+        [Trait("SafeCollections", "SafeList")]
+        public void 批次新增元素至集合_新增成功_新增結果應符合期待()
+        {
+            var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
+            safeList.AddRange(Enumerable.Range(7, 3));
+            var expectedResult = new List<int> { 1, 2, 3, 4, 5, 7, 8, 9 };
+            safeList.SequenceEqual(expectedResult).Should().Be(true);
+        }
+
+        [Fact]
+        [Trait("SafeCollections", "SafeList")]
+        public void ForEach繞行集合_繞行成功_繞行結果應符合期待()
+        {
+            var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
+            var result = "";
+            safeList.ForEach(x => result += x.ToString());
+            const string expectedResult = "12345";
+            result.Should().Be(expectedResult);
+        }
+
+        [Fact]
+        [Trait("SafeCollections", "SafeList")]
+        public void 取得依照指定條件元素是否存在於集合_元素存在_回傳True()
+        {
+            var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
+            var result = safeList.Exists(x => x > 3);
+            const bool expectedResult = true;
+            result.Should().Be(expectedResult);
+        }
+
+        [Fact]
+        [Trait("SafeCollections", "SafeList")]
+        public void 取得依照指定條件元素是否存在於集合_元素存在_回傳False()
+        {
+            var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
+            var result = safeList.Exists(x => x > 5);
+            const bool expectedResult = false;
+            result.Should().Be(expectedResult);
+        }
+
         [Fact(Skip = "MutiThread scenario result in long running, this test case should be executed only on demand.")]
         //[Fact]
         [Trait("SafeCollections", "SafeList")]
@@ -182,6 +243,22 @@ namespace SafeCollectionsTests
                 while (true)
                 {
                     safeList.Remove(0);
+                }
+            });
+
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    var result = safeList.FindAll(x => x < 1);
+                }
+            });
+
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    safeList.AddRange(Enumerable.Range(0, 3));
                 }
             });
 

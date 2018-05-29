@@ -99,5 +99,35 @@ namespace SafeCollections
             lock (_locker)
                 _list.RemoveAt(index);
         }
+
+        public SafeList<T> FindAll(Predicate<T> match)
+        {
+            lock (_locker)
+                return _list.FindAll(match).ToSafeList();
+        }
+
+        public void AddRange(IEnumerable<T> collection)
+        {
+            lock (_locker)
+                _list.AddRange(collection);
+        }
+
+        public void ForEach(Action<T> action)
+        {
+            lock (_locker)
+                _list.ForEach(action);
+        }
+
+        public T Find(Predicate<T> match)
+        {
+            lock (_locker)
+                return _list.Find(match);
+        }
+
+        public bool Exists(Predicate<T> match)
+        {
+            lock (_locker)
+                return _list.Exists(match);
+        }
     }
 }

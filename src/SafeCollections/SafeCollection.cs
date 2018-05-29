@@ -14,9 +14,7 @@ namespace SafeCollections
             get
             {
                 lock (_locker)
-                {
                     return _collection.Count;
-                }
             }
         }
 
@@ -31,33 +29,25 @@ namespace SafeCollections
         public void Add(T item)
         {
             lock (_locker)
-            {
                 _collection.Add(item);
-            }
         }
 
         public void Clear()
         {
             lock (_locker)
-            {
                 _collection.Clear();
-            }
         }
 
         public bool Contains(T item)
         {
             lock (_locker)
-            {
                 return _collection.Contains(item);
-            }
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
             lock (_locker)
-            {
                 _collection.CopyTo(array, arrayIndex);
-            }
         }
 
         public IEnumerator<T> GetEnumerator() => new SafeEnumerator<T>(_collection, _locker);
@@ -67,9 +57,7 @@ namespace SafeCollections
         public bool Remove(T item)
         {
             lock (_locker)
-            {
                 return _collection.Remove(item);
-            }
         }
     }
 }

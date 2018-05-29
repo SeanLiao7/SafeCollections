@@ -36,16 +36,12 @@ namespace SafeCollections
             get
             {
                 lock (_locker)
-                {
                     return _table[key];
-                }
             }
             set
             {
                 lock (_locker)
-                {
                     _table[key] = value;
-                }
             }
         }
 
@@ -70,33 +66,25 @@ namespace SafeCollections
         public void Clear()
         {
             lock (_locker)
-            {
                 _table.Clear();
-            }
         }
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
         {
             lock (_locker)
-            {
                 return _table.Contains(item);
-            }
         }
 
         public bool ContainsKey(TKey key)
         {
             lock (_locker)
-            {
                 return _table.ContainsKey(key);
-            }
         }
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
             lock (_locker)
-            {
                 _table.CopyTo(array, arrayIndex);
-            }
         }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
@@ -107,25 +95,19 @@ namespace SafeCollections
         public bool Remove(TKey key)
         {
             lock (_locker)
-            {
                 return _table.Remove(key);
-            }
         }
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
         {
             lock (_locker)
-            {
                 return _table.Remove(item);
-            }
         }
 
         public bool TryGetValue(TKey key, out TValue value)
         {
             lock (_locker)
-            {
                 return _table.TryGetValue(key, out value);
-            }
         }
     }
 }
