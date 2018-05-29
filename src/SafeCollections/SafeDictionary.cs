@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SafeCollections
 {
-    public class SafeDictionary<TKey, TValue> : IDictionary<TKey, TValue>
+    public sealed class SafeDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
         private readonly object _locker;
         private readonly IDictionary<TKey, TValue> _table;
