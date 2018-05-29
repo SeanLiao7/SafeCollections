@@ -8,20 +8,20 @@ namespace SafeCollections
     public struct SafeTableEnumerator<TKey, TValue> : IEnumerator<KeyValuePair<TKey, TValue>>
     {
         private readonly IEnumerator<KeyValuePair<TKey, TValue>> _enumerator;
-        private readonly object _locker;
+        private readonly ReaderWriterLockSlim _locker;
         KeyValuePair<TKey, TValue> IEnumerator<KeyValuePair<TKey, TValue>>.Current => _enumerator.Current;
         object IEnumerator.Current => _enumerator.Current;
 
-        public SafeTableEnumerator(IDictionary<TKey, TValue> table, object locker)
+        public SafeTableEnumerator(IDictionary<TKey, TValue> table, ReaderWriterLockSlim locker)
         {
-            Monitor.Enter(locker);
-            _enumerator = table.GetEnumerator();
             _locker = locker;
+            _locker.EnterReadLock();
+            _enumerator = table.GetEnumerator();
         }
 
         void IDisposable.Dispose()
         {
-            Monitor.Exit(_locker);
+            _locker.ExitReadLock();
         }
 
         bool IEnumerator.MoveNext()

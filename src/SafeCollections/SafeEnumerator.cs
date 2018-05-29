@@ -15,9 +15,9 @@ namespace SafeCollections
 
         public SafeEnumerator(IEnumerable<T> list, ReaderWriterLockSlim locker)
         {
-            locker.EnterReadLock();
-            _enumerator = list.GetEnumerator();
             _locker = locker;
+            _locker.EnterReadLock();
+            _enumerator = list.GetEnumerator();
         }
 
         public void Dispose() => _locker.ExitReadLock();

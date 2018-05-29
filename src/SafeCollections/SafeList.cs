@@ -32,7 +32,7 @@ namespace SafeCollections
         public SafeList(List<T> list = null, ReaderWriterLockSlim locker = null)
         {
             _list = list ?? new List<T>();
-            _locker = locker ?? new ReaderWriterLockSlim();
+            _locker = locker ?? new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         }
 
         public T this[int index]
@@ -192,32 +192,68 @@ namespace SafeCollections
 
         public SafeList<T> FindAll(Predicate<T> match)
         {
-            lock (_locker)
+            _locker.EnterReadLock();
+            try
+            {
                 return _list.FindAll(match).ToSafeList();
+            }
+            finally
+            {
+                _locker.ExitReadLock();
+            }
         }
 
         public void AddRange(IEnumerable<T> collection)
         {
-            lock (_locker)
+            _locker.EnterWriteLock();
+            try
+            {
                 _list.AddRange(collection);
+
+            }
+            finally
+            {
+                _locker.ExitWriteLock();
+            }
         }
 
         public void ForEach(Action<T> action)
         {
-            lock (_locker)
+            _locker.EnterReadLock();
+            try
+            {
                 _list.ForEach(action);
+            }
+            finally
+            {
+                _locker.ExitReadLock();
+            }
         }
 
         public T Find(Predicate<T> match)
         {
-            lock (_locker)
+            _locker.EnterReadLock();
+            try
+            {
                 return _list.Find(match);
+            }
+            finally
+            {
+                _locker.ExitReadLock();
+            }
         }
 
         public bool Exists(Predicate<T> match)
         {
-            lock (_locker)
+            _locker.EnterReadLock();
+            try
+            {
                 return _list.Exists(match);
+            }
+            finally
+            {
+                _locker.ExitReadLock();
+            }
         }
     }
 }

@@ -14,8 +14,15 @@ namespace SafeCollections
         {
             get
             {
-                lock (_locker)
+                _locker.EnterReadLock();
+                try
+                {
                     return _collection.Count;
+                }
+                finally
+                {
+                    _locker.ExitReadLock();
+                }
             }
         }
 
@@ -24,31 +31,59 @@ namespace SafeCollections
         public SafeCollection(ICollection<T> collection = null, ReaderWriterLockSlim locker = null)
         {
             _collection = collection ?? new Collection<T>();
-            _locker = locker ?? new ReaderWriterLockSlim();
+            _locker = locker ?? new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         }
 
         public void Add(T item)
         {
-            lock (_locker)
+            _locker.EnterWriteLock();
+            try
+            {
                 _collection.Add(item);
+            }
+            finally
+            {
+                _locker.ExitWriteLock();
+            }
         }
 
         public void Clear()
         {
-            lock (_locker)
+            _locker.EnterWriteLock();
+            try
+            {
                 _collection.Clear();
+            }
+            finally
+            {
+                _locker.ExitWriteLock();
+            }
         }
 
         public bool Contains(T item)
         {
-            lock (_locker)
+            _locker.EnterReadLock();
+            try
+            {
                 return _collection.Contains(item);
+            }
+            finally
+            {
+                _locker.ExitReadLock();
+            }
         }
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            lock (_locker)
+            _locker.EnterReadLock();
+            try
+            {
                 _collection.CopyTo(array, arrayIndex);
+            }
+            finally
+            {
+                _locker.ExitReadLock();
+            }
         }
 
         public IEnumerator<T> GetEnumerator() => new SafeEnumerator<T>(_collection, _locker);
@@ -57,8 +92,15 @@ namespace SafeCollections
 
         public bool Remove(T item)
         {
-            lock (_locker)
+            _locker.EnterWriteLock();
+            try
+            {
                 return _collection.Remove(item);
+            }
+            finally
+            {
+                _locker.ExitWriteLock();
+            }
         }
     }
 }
