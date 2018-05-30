@@ -286,7 +286,7 @@ namespace SafeCollectionsTests
             var result = new Dictionary<int, int>();
             foreach (var x in safeDictionary)
                 result.Add(x.Key, x.Value);
-            result.SequenceEqual(safeDictionary).Should().Be(true);
+            result.Should().BeEquivalentTo(safeDictionary);
         }
 
         [Fact]
@@ -299,7 +299,7 @@ namespace SafeCollectionsTests
             var result = new Collection<int>();
             foreach (var x in safeDictionary.Keys)
                 result.Add(x);
-            result.SequenceEqual(safeDictionary.Keys).Should().Be(true);
+            result.Should().BeEquivalentTo(safeDictionary.Keys);
         }
 
         [Fact]
@@ -312,7 +312,7 @@ namespace SafeCollectionsTests
             var result = new Collection<int>();
             foreach (var x in safeDictionary.Values)
                 result.Add(x);
-            result.SequenceEqual(safeDictionary.Values).Should().Be(true);
+            result.Should().BeEquivalentTo(safeDictionary.Values);
         }
 
         [Fact(Skip = "MutiThread scenario result in long running, this test case should be executed only on demand.")]

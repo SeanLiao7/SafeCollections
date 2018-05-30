@@ -46,6 +46,7 @@
     <Compile Include="SafeEnumerable.cs" />
     <Compile Include="SafeEnumerator.cs" />
     <Compile Include="SafeExtensions.cs" />
+    <Compile Include="SafeHashSet.cs" />
     <Compile Include="SafeList.cs" />
     <Compile Include="SafeTableEnumerator.cs" />
   </ItemGroup>

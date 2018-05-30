@@ -96,7 +96,7 @@ namespace SafeCollectionsTests
             safeList.AddMany(fixture.Create<int>, 3);
             var array = new int[3];
             safeList.CopyTo(array, 0);
-            array.SequenceEqual(safeList).Should().Be(true);
+            array.Should().BeEquivalentTo(safeList);
         }
 
         [Fact]
@@ -159,7 +159,7 @@ namespace SafeCollectionsTests
             var result = new List<int>();
             foreach (var x in safeList)
                 result.Add(x);
-            result.SequenceEqual(safeList).Should().Be(true);
+            result.Should().BeEquivalentTo(safeList);
         }
 
         [Fact]
@@ -179,7 +179,7 @@ namespace SafeCollectionsTests
             var safeList = new SafeList<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             var result = safeList.FindAll(x => x < 6);
             var expectedResult = new List<int> { 1, 2, 3, 4, 5 };
-            result.SequenceEqual(expectedResult).Should().Be(true);
+            result.Should().BeEquivalentTo(expectedResult);
         }
 
         [Fact]
@@ -189,7 +189,7 @@ namespace SafeCollectionsTests
             var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
             safeList.AddRange(Enumerable.Range(7, 3));
             var expectedResult = new List<int> { 1, 2, 3, 4, 5, 7, 8, 9 };
-            safeList.SequenceEqual(expectedResult).Should().Be(true);
+            safeList.Should().BeEquivalentTo(expectedResult);
         }
 
         [Fact]

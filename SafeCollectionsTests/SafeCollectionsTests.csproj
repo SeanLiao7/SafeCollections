@@ -88,6 +88,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SafeCollectionTests.cs" />
     <Compile Include="SafeDictionaryTests.cs" />
+    <Compile Include="SafeHashSetTests.cs" />
     <Compile Include="SafeListTests.cs" />
   </ItemGroup>
   <ItemGroup>
