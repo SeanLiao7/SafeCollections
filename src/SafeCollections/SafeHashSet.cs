@@ -3,10 +3,13 @@ using System.Collections.Generic;
 
 namespace SafeCollections
 {
-    public class SafeHashSet<T> : ISet<T>
+    public sealed class SafeHashSet<T> : ISet<T>
     {
-        private readonly object _locker;
         private readonly ISet<T> _hashSet;
+        private readonly object _locker;
+        public int Count => _hashSet.Count;
+
+        public bool IsReadOnly => false;
 
         public SafeHashSet(ISet<T> hashSet = null, object locker = null)
         {
@@ -14,74 +17,9 @@ namespace SafeCollections
             _locker = locker ?? new object();
         }
 
-        public IEnumerator<T> GetEnumerator() => new SafeEnumerator<T>(_hashSet, _locker);
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
         void ICollection<T>.Add(T item)
         {
-            lock (_locker)
-                _hashSet.Add(item);
-        }
-
-        public void UnionWith(IEnumerable<T> other)
-        {
-            lock (_locker)
-                _hashSet.UnionWith(other);
-        }
-
-        public void IntersectWith(IEnumerable<T> other)
-        {
-            lock (_locker)
-                _hashSet.IntersectWith(other);
-        }
-
-        public void ExceptWith(IEnumerable<T> other)
-        {
-            lock (_locker)
-                _hashSet.ExceptWith(other);
-        }
-
-        public void SymmetricExceptWith(IEnumerable<T> other)
-        {
-            lock (_locker)
-                _hashSet.SymmetricExceptWith(other);
-        }
-
-        public bool IsSubsetOf(IEnumerable<T> other)
-        {
-            lock (_locker)
-                return _hashSet.IsSubsetOf(other);
-        }
-
-        public bool IsSupersetOf(IEnumerable<T> other)
-        {
-            lock (_locker)
-                return _hashSet.IsSupersetOf(other);
-        }
-
-        public bool IsProperSupersetOf(IEnumerable<T> other)
-        {
-            lock (_locker)
-                return _hashSet.IsProperSupersetOf(other);
-        }
-
-        public bool IsProperSubsetOf(IEnumerable<T> other)
-        {
-            lock (_locker)
-                return _hashSet.IsProperSubsetOf(other);
-        }
-
-        public bool Overlaps(IEnumerable<T> other)
-        {
-            lock (_locker)
-                return _hashSet.Overlaps(other);
-        }
-
-        public bool SetEquals(IEnumerable<T> other)
-        {
-            lock (_locker)
-                return _hashSet.SetEquals(other);
+            Add(item);
         }
 
         public bool Add(T item)
@@ -108,13 +46,74 @@ namespace SafeCollections
                 _hashSet.CopyTo(array, arrayIndex);
         }
 
+        public void ExceptWith(IEnumerable<T> other)
+        {
+            lock (_locker)
+                _hashSet.ExceptWith(other);
+        }
+
+        public IEnumerator<T> GetEnumerator() => new SafeEnumerator<T>(_hashSet, _locker);
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public void IntersectWith(IEnumerable<T> other)
+        {
+            lock (_locker)
+                _hashSet.IntersectWith(other);
+        }
+
+        public bool IsProperSubsetOf(IEnumerable<T> other)
+        {
+            lock (_locker)
+                return _hashSet.IsProperSubsetOf(other);
+        }
+
+        public bool IsProperSupersetOf(IEnumerable<T> other)
+        {
+            lock (_locker)
+                return _hashSet.IsProperSupersetOf(other);
+        }
+
+        public bool IsSubsetOf(IEnumerable<T> other)
+        {
+            lock (_locker)
+                return _hashSet.IsSubsetOf(other);
+        }
+
+        public bool IsSupersetOf(IEnumerable<T> other)
+        {
+            lock (_locker)
+                return _hashSet.IsSupersetOf(other);
+        }
+
+        public bool Overlaps(IEnumerable<T> other)
+        {
+            lock (_locker)
+                return _hashSet.Overlaps(other);
+        }
+
         public bool Remove(T item)
         {
             lock (_locker)
                 return _hashSet.Remove(item);
         }
 
-        public int Count => _hashSet.Count;
-        public bool IsReadOnly => false;
+        public bool SetEquals(IEnumerable<T> other)
+        {
+            lock (_locker)
+                return _hashSet.SetEquals(other);
+        }
+
+        public void SymmetricExceptWith(IEnumerable<T> other)
+        {
+            lock (_locker)
+                _hashSet.SymmetricExceptWith(other);
+        }
+
+        public void UnionWith(IEnumerable<T> other)
+        {
+            lock (_locker)
+                _hashSet.UnionWith(other);
+        }
     }
 }

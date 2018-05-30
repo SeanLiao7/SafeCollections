@@ -46,6 +46,12 @@ namespace SafeCollections
                 _list.Add(item);
         }
 
+        public void AddRange(IEnumerable<T> collection)
+        {
+            lock (_locker)
+                _list.AddRange(collection);
+        }
+
         public void Clear()
         {
             lock (_locker)
@@ -62,6 +68,30 @@ namespace SafeCollections
         {
             lock (_locker)
                 _list.CopyTo(array, arrayIndex);
+        }
+
+        public bool Exists(Predicate<T> match)
+        {
+            lock (_locker)
+                return _list.Exists(match);
+        }
+
+        public T Find(Predicate<T> match)
+        {
+            lock (_locker)
+                return _list.Find(match);
+        }
+
+        public SafeList<T> FindAll(Predicate<T> match)
+        {
+            lock (_locker)
+                return _list.FindAll(match).ToSafeList();
+        }
+
+        public void ForEach(Action<T> action)
+        {
+            lock (_locker)
+                _list.ForEach(action);
         }
 
         public IEnumerator<T> GetEnumerator() => new SafeEnumerator<T>(_list, _locker);
@@ -98,36 +128,6 @@ namespace SafeCollections
         {
             lock (_locker)
                 _list.RemoveAt(index);
-        }
-
-        public SafeList<T> FindAll(Predicate<T> match)
-        {
-            lock (_locker)
-                return _list.FindAll(match).ToSafeList();
-        }
-
-        public void AddRange(IEnumerable<T> collection)
-        {
-            lock (_locker)
-                _list.AddRange(collection);
-        }
-
-        public void ForEach(Action<T> action)
-        {
-            lock (_locker)
-                _list.ForEach(action);
-        }
-
-        public T Find(Predicate<T> match)
-        {
-            lock (_locker)
-                return _list.Find(match);
-        }
-
-        public bool Exists(Predicate<T> match)
-        {
-            lock (_locker)
-                return _list.Exists(match);
         }
     }
 }
