@@ -178,7 +178,6 @@ namespace SafeCollections
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-
             _locker.EnterReadLock();
             try
             {

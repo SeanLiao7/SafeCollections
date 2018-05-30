@@ -6,6 +6,7 @@ namespace SafeCollections
     {
         // if lock is above this value then somebody has a write lock
         private const int WriterLock = 1000000;
+
         // lock state counter
         private int _lock;
 

@@ -13,6 +13,17 @@ namespace SafeCollectionsTests
     {
         [Fact]
         [Trait("SafeCollections", "SafeList")]
+        public void ForEach繞行集合_繞行成功_繞行結果應符合期待()
+        {
+            var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
+            var result = "";
+            safeList.ForEach(x => result += x.ToString());
+            const string expectedResult = "12345";
+            result.Should().Be(expectedResult);
+        }
+
+        [Fact]
+        [Trait("SafeCollections", "SafeList")]
         public void SafeList中移除指定Index元素_集合包含該元素且移除元素成功_集合長度減1()
         {
             var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
@@ -56,6 +67,16 @@ namespace SafeCollectionsTests
 
         [Fact]
         [Trait("SafeCollections", "SafeList")]
+        public void 批次新增元素至集合_新增成功_新增結果應符合期待()
+        {
+            var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
+            safeList.AddRange(Enumerable.Range(7, 3));
+            var expectedResult = new List<int> { 1, 2, 3, 4, 5, 7, 8, 9 };
+            safeList.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [Fact]
+        [Trait("SafeCollections", "SafeList")]
         public void 初始化一個SafeList並加入1個元素_加入成功_集合中應包含該元素且長度為1()
         {
             var safeList = new SafeList<int>();
@@ -85,6 +106,26 @@ namespace SafeCollectionsTests
             var index = safeList.IndexOf(3);
             const int expectedIndex = 2;
             index.Should().Be(expectedIndex);
+        }
+
+        [Fact]
+        [Trait("SafeCollections", "SafeList")]
+        public void 取得依照指定條件元素是否存在於集合_元素存在_回傳False()
+        {
+            var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
+            var result = safeList.Exists(x => x > 5);
+            const bool expectedResult = false;
+            result.Should().Be(expectedResult);
+        }
+
+        [Fact]
+        [Trait("SafeCollections", "SafeList")]
+        public void 取得依照指定條件元素是否存在於集合_元素存在_回傳True()
+        {
+            var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
+            var result = safeList.Exists(x => x > 3);
+            const bool expectedResult = true;
+            result.Should().Be(expectedResult);
         }
 
         [Fact]
@@ -133,6 +174,26 @@ namespace SafeCollectionsTests
 
         [Fact]
         [Trait("SafeCollections", "SafeList")]
+        public void 搜尋集合所有符合條件的元素_搜尋成功_搜尋結果應符合期待()
+        {
+            var safeList = new SafeList<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            var result = safeList.FindAll(x => x < 6);
+            var expectedResult = new List<int> { 1, 2, 3, 4, 5 };
+            result.Should().BeEquivalentTo(expectedResult);
+        }
+
+        [Fact]
+        [Trait("SafeCollections", "SafeList")]
+        public void 搜尋集和符合條件的單一元素_搜尋成功_搜尋結果應符合期待()
+        {
+            var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
+            var result = safeList.Find(x => x > 2);
+            const int expectedResult = 3;
+            result.Should().Be(expectedResult);
+        }
+
+        [Fact]
+        [Trait("SafeCollections", "SafeList")]
         public void 詢問SafeList是否包含目標元素_不含有該元素_應回傳False()
         {
             var safeList = new SafeList<int> { 1, 2, 3 };
@@ -160,67 +221,6 @@ namespace SafeCollectionsTests
             foreach (var x in safeList)
                 result.Add(x);
             result.Should().BeEquivalentTo(safeList);
-        }
-
-        [Fact]
-        [Trait("SafeCollections", "SafeList")]
-        public void 搜尋集和符合條件的單一元素_搜尋成功_搜尋結果應符合期待()
-        {
-            var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
-            var result = safeList.Find(x => x > 2);
-            const int expectedResult = 3;
-            result.Should().Be(expectedResult);
-        }
-
-        [Fact]
-        [Trait("SafeCollections", "SafeList")]
-        public void 搜尋集合所有符合條件的元素_搜尋成功_搜尋結果應符合期待()
-        {
-            var safeList = new SafeList<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-            var result = safeList.FindAll(x => x < 6);
-            var expectedResult = new List<int> { 1, 2, 3, 4, 5 };
-            result.Should().BeEquivalentTo(expectedResult);
-        }
-
-        [Fact]
-        [Trait("SafeCollections", "SafeList")]
-        public void 批次新增元素至集合_新增成功_新增結果應符合期待()
-        {
-            var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
-            safeList.AddRange(Enumerable.Range(7, 3));
-            var expectedResult = new List<int> { 1, 2, 3, 4, 5, 7, 8, 9 };
-            safeList.Should().BeEquivalentTo(expectedResult);
-        }
-
-        [Fact]
-        [Trait("SafeCollections", "SafeList")]
-        public void ForEach繞行集合_繞行成功_繞行結果應符合期待()
-        {
-            var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
-            var result = "";
-            safeList.ForEach(x => result += x.ToString());
-            const string expectedResult = "12345";
-            result.Should().Be(expectedResult);
-        }
-
-        [Fact]
-        [Trait("SafeCollections", "SafeList")]
-        public void 取得依照指定條件元素是否存在於集合_元素存在_回傳True()
-        {
-            var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
-            var result = safeList.Exists(x => x > 3);
-            const bool expectedResult = true;
-            result.Should().Be(expectedResult);
-        }
-
-        [Fact]
-        [Trait("SafeCollections", "SafeList")]
-        public void 取得依照指定條件元素是否存在於集合_元素存在_回傳False()
-        {
-            var safeList = new SafeList<int> { 1, 2, 3, 4, 5 };
-            var result = safeList.Exists(x => x > 5);
-            const bool expectedResult = false;
-            result.Should().Be(expectedResult);
         }
 
         [Fact(Skip = "MutiThread scenario result in long running, this test case should be executed only on demand.")]

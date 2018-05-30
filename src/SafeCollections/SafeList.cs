@@ -77,6 +77,19 @@ namespace SafeCollections
             }
         }
 
+        public void AddRange(IEnumerable<T> collection)
+        {
+            _locker.EnterWriteLock();
+            try
+            {
+                _list.AddRange(collection);
+            }
+            finally
+            {
+                _locker.ExitWriteLock();
+            }
+        }
+
         public void Clear()
         {
             _locker.EnterWriteLock();
@@ -114,7 +127,58 @@ namespace SafeCollections
             finally
             {
                 _locker.ExitReadLock();
+            }
+        }
 
+        public bool Exists(Predicate<T> match)
+        {
+            _locker.EnterReadLock();
+            try
+            {
+                return _list.Exists(match);
+            }
+            finally
+            {
+                _locker.ExitReadLock();
+            }
+        }
+
+        public T Find(Predicate<T> match)
+        {
+            _locker.EnterReadLock();
+            try
+            {
+                return _list.Find(match);
+            }
+            finally
+            {
+                _locker.ExitReadLock();
+            }
+        }
+
+        public SafeList<T> FindAll(Predicate<T> match)
+        {
+            _locker.EnterReadLock();
+            try
+            {
+                return _list.FindAll(match).ToSafeList();
+            }
+            finally
+            {
+                _locker.ExitReadLock();
+            }
+        }
+
+        public void ForEach(Action<T> action)
+        {
+            _locker.EnterReadLock();
+            try
+            {
+                _list.ForEach(action);
+            }
+            finally
+            {
+                _locker.ExitReadLock();
             }
         }
 
@@ -187,72 +251,6 @@ namespace SafeCollections
             finally
             {
                 _locker.ExitWriteLock();
-            }
-        }
-
-        public SafeList<T> FindAll(Predicate<T> match)
-        {
-            _locker.EnterReadLock();
-            try
-            {
-                return _list.FindAll(match).ToSafeList();
-            }
-            finally
-            {
-                _locker.ExitReadLock();
-            }
-        }
-
-        public void AddRange(IEnumerable<T> collection)
-        {
-            _locker.EnterWriteLock();
-            try
-            {
-                _list.AddRange(collection);
-
-            }
-            finally
-            {
-                _locker.ExitWriteLock();
-            }
-        }
-
-        public void ForEach(Action<T> action)
-        {
-            _locker.EnterReadLock();
-            try
-            {
-                _list.ForEach(action);
-            }
-            finally
-            {
-                _locker.ExitReadLock();
-            }
-        }
-
-        public T Find(Predicate<T> match)
-        {
-            _locker.EnterReadLock();
-            try
-            {
-                return _list.Find(match);
-            }
-            finally
-            {
-                _locker.ExitReadLock();
-            }
-        }
-
-        public bool Exists(Predicate<T> match)
-        {
-            _locker.EnterReadLock();
-            try
-            {
-                return _list.Exists(match);
-            }
-            finally
-            {
-                _locker.ExitReadLock();
             }
         }
     }
