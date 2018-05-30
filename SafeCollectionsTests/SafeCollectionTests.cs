@@ -53,10 +53,10 @@ namespace SafeCollectionsTests
         {
             var safeCollection = new SafeCollection<int>();
             var fixture = new Fixture();
-            safeCollection.AddMany(fixture.Create<int>, 3);
-            var array = new int[3];
+            safeCollection.AddMany(fixture.Create<int>, 10);
+            var array = new int[10];
             safeCollection.CopyTo(array, 0);
-            array.SequenceEqual(safeCollection).Should().Be(true);
+            array.Should().BeEquivalentTo(safeCollection);
         }
 
         [Fact]
@@ -97,7 +97,7 @@ namespace SafeCollectionsTests
             var result = new Collection<int>();
             foreach (var x in safeCollection)
                 result.Add(x);
-            result.SequenceEqual(safeCollection).Should().Be(true);
+            result.Should().BeEquivalentTo(safeCollection);
         }
 
         [Fact(Skip = "MutiThread scenario result in long running, this test case should be executed only on demand.")]
