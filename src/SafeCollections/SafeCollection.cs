@@ -9,23 +9,7 @@ namespace SafeCollections
     {
         private readonly ICollection<T> _collection;
         private readonly ReaderWriterLockSlim _locker;
-
-        public int Count
-        {
-            get
-            {
-                _locker.EnterReadLock();
-                try
-                {
-                    return _collection.Count;
-                }
-                finally
-                {
-                    _locker.ExitReadLock();
-                }
-            }
-        }
-
+        public int Count => _collection.Count;
         public bool IsReadOnly => false;
 
         public SafeCollection(ICollection<T> collection = null, ReaderWriterLockSlim locker = null)

@@ -9,7 +9,6 @@ namespace SafeCollections
         private readonly ISet<T> _hashSet;
         private readonly ReaderWriterLockSlim _locker;
         public int Count => _hashSet.Count;
-
         public bool IsReadOnly => false;
 
         public SafeHashSet(ISet<T> hashSet = null, ReaderWriterLockSlim locker = null)

@@ -9,24 +9,7 @@ namespace SafeCollections
     {
         private readonly List<T> _list;
         private readonly ReaderWriterLockSlim _locker;
-
-        public int Count
-        {
-            get
-            {
-                _locker.EnterReadLock();
-                try
-                {
-                    var count = _list.Count;
-                    return count;
-                }
-                finally
-                {
-                    _locker.ExitReadLock();
-                }
-            }
-        }
-
+        public int Count => _list.Count;
         public bool IsReadOnly => false;
 
         public SafeList(List<T> list = null, ReaderWriterLockSlim locker = null)
