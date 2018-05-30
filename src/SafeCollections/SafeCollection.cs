@@ -8,15 +8,7 @@ namespace SafeCollections
     {
         private readonly ICollection<T> _collection;
         private readonly object _locker;
-
-        public int Count
-        {
-            get
-            {
-                lock (_locker)
-                    return _collection.Count;
-            }
-        }
+        public int Count => _collection.Count;
 
         public bool IsReadOnly => false;
 
