@@ -42,7 +42,7 @@ namespace SafeCollections
                 }
                 finally
                 {
-                    _locker.EnterWriteLock();
+                    _locker.ExitWriteLock();
                 }
             }
         }
