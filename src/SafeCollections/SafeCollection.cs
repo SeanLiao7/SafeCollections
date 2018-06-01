@@ -1,21 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading;
 
 namespace SafeCollections
 {
     public sealed class SafeCollection<T> : ICollection<T>
     {
         private readonly ICollection<T> _collection;
-        private readonly ReaderWriterLockSlim _locker;
+        private readonly ReaderWriterLockTiny _locker;
         public int Count => _collection.Count;
         public bool IsReadOnly => false;
 
-        public SafeCollection(ICollection<T> collection = null, ReaderWriterLockSlim locker = null)
+        public SafeCollection(ICollection<T> collection = null, ReaderWriterLockTiny locker = null)
         {
             _collection = collection ?? new Collection<T>();
-            _locker = locker ?? new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+            _locker = locker ?? new ReaderWriterLockTiny();
         }
 
         public void Add(T item)

@@ -1,19 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace SafeCollections
 {
     public struct SafeEnumerator<T> : IEnumerator<T>
     {
         private readonly IEnumerator<T> _enumerator;
-        private readonly ReaderWriterLockSlim _locker;
+        private readonly ReaderWriterLockTiny _locker;
 
         public T Current => _enumerator.Current;
 
         object IEnumerator.Current => Current;
 
-        public SafeEnumerator(IEnumerable<T> list, ReaderWriterLockSlim locker)
+        public SafeEnumerator(IEnumerable<T> list, ReaderWriterLockTiny locker)
         {
             _locker = locker;
             _locker.EnterReadLock();

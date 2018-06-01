@@ -1,20 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace SafeCollections
 {
     public sealed class SafeHashSet<T> : ISet<T>
     {
         private readonly ISet<T> _hashSet;
-        private readonly ReaderWriterLockSlim _locker;
+        private readonly ReaderWriterLockTiny _locker;
         public int Count => _hashSet.Count;
         public bool IsReadOnly => false;
 
-        public SafeHashSet(ISet<T> hashSet = null, ReaderWriterLockSlim locker = null)
+        public SafeHashSet(ISet<T> hashSet = null, ReaderWriterLockTiny locker = null)
         {
             _hashSet = hashSet ?? new HashSet<T>();
-            _locker = locker ?? new ReaderWriterLockSlim();
+            _locker = locker ?? new ReaderWriterLockTiny();
         }
 
         void ICollection<T>.Add(T item)

@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace SafeCollections
 {
     public sealed class SafeList<T> : IList<T>
     {
         private readonly List<T> _list;
-        private readonly ReaderWriterLockSlim _locker;
+        private readonly ReaderWriterLockTiny _locker;
         public int Count => _list.Count;
         public bool IsReadOnly => false;
 
-        public SafeList(List<T> list = null, ReaderWriterLockSlim locker = null)
+        public SafeList(List<T> list = null, ReaderWriterLockTiny locker = null)
         {
             _list = list ?? new List<T>();
-            _locker = locker ?? new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+            _locker = locker ?? new ReaderWriterLockTiny();
         }
 
         public T this[int index]
@@ -42,7 +41,7 @@ namespace SafeCollections
                 }
                 finally
                 {
-                    _locker.EnterWriteLock();
+                    _locker.ExitWriteLock();
                 }
             }
         }

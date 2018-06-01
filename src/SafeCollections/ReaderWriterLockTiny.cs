@@ -2,10 +2,10 @@
 
 namespace SafeCollections
 {
-    public struct ReaderWriterLockTiny
+    public class ReaderWriterLockTiny
     {
-        // if lock is above this value then somebody has a write lock
-        private const int WriterLock = 1000000;
+        // if lock equals to this value then somebody has a write lock
+        private const int WriterLock = -1;
 
         // lock state counter
         private int _lock;
@@ -14,7 +14,7 @@ namespace SafeCollections
         {
             var w = new SpinWait();
             var tmpLock = _lock;
-            while (tmpLock >= WriterLock ||
+            while (tmpLock == WriterLock ||
                    tmpLock != Interlocked.CompareExchange(ref _lock, tmpLock + 1, tmpLock))
             {
                 w.SpinOnce();

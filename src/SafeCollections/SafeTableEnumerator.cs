@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace SafeCollections
 {
     public struct SafeTableEnumerator<TKey, TValue> : IEnumerator<KeyValuePair<TKey, TValue>>
     {
         private readonly IEnumerator<KeyValuePair<TKey, TValue>> _enumerator;
-        private readonly ReaderWriterLockSlim _locker;
+        private readonly ReaderWriterLockTiny _locker;
         KeyValuePair<TKey, TValue> IEnumerator<KeyValuePair<TKey, TValue>>.Current => _enumerator.Current;
         object IEnumerator.Current => _enumerator.Current;
 
-        public SafeTableEnumerator(IDictionary<TKey, TValue> table, ReaderWriterLockSlim locker)
+        public SafeTableEnumerator(IDictionary<TKey, TValue> table, ReaderWriterLockTiny locker)
         {
             _locker = locker;
             _locker.EnterReadLock();
