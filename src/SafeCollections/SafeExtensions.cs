@@ -13,7 +13,10 @@ namespace SafeCollections
         public static SafeDictionary<TKey, TValue> ToSafeDictionary<TKey, TValue>(this IDictionary<TKey, TValue> table, object locker = null)
             => new SafeDictionary<TKey, TValue>(table, locker);
 
+        public static SafeHashSet<T> ToSafeHashSet<T>(this ISet<T> set, object locker = null)
+            => new SafeHashSet<T>(set, locker);
+
         public static SafeList<T> ToSafeList<T>(this List<T> list, object locker = null)
-                    => new SafeList<T>(list, locker);
+            => new SafeList<T>(list, locker);
     }
 }
