@@ -15,6 +15,9 @@ namespace SafeCollections
             => new SafeDictionary<TKey, TValue>(table, locker);
 
         public static SafeList<T> ToSafeList<T>(this List<T> list, ReaderWriterLockSlim locker = null)
-                    => new SafeList<T>(list, locker);
+            => new SafeList<T>(list, locker);
+
+        public static SafeHashSet<T> ToSafeSafeHashSet<T>(this ISet<T> set, ReaderWriterLockSlim locker =null)
+            => new SafeHashSet<T>(set,locker);
     }
 }
