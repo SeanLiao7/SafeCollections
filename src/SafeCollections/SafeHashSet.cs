@@ -14,7 +14,7 @@ namespace SafeCollections
         public SafeHashSet(ISet<T> hashSet = null, ReaderWriterLockSlim locker = null)
         {
             _hashSet = hashSet ?? new HashSet<T>();
-            _locker = locker ?? new ReaderWriterLockSlim();
+            _locker = locker ?? new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         }
 
         void ICollection<T>.Add(T item)
